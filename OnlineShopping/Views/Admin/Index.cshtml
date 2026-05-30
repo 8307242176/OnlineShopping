@@ -1,0 +1,106 @@
+﻿@model OnlineShopping.ViewModel.AdminDashboardVM
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section style="padding: 40px 0;">
+    <div class="container">
+        <h2 class="mb-4">
+            <i class="ti-dashboard"></i> Admin Dashboard
+        </h2>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+
+            <div class="col-md-3 mb-3">
+                <div class="card text-center p-3"
+                     style="border-left: 4px solid #ff3a6e;">
+                    <h2 style="color:#ff3a6e;">@Model.TotalProducts</h2>
+                    <p class="text-muted mb-0">Total Products</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card text-center p-3"
+                     style="border-left: 4px solid #5bc0de;">
+                    <h2 style="color:#5bc0de;">@Model.TotalOrders</h2>
+                    <p class="text-muted mb-0">Total Orders</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card text-center p-3"
+                     style="border-left: 4px solid #5cb85c;">
+                    <h2 style="color:#5cb85c;">@Model.TotalUsers</h2>
+                    <p class="text-muted mb-0">Total Users</p>
+                </div>
+            </div>
+
+            <div class="col-md-3 mb-3">
+                <div class="card text-center p-3"
+                     style="border-left: 4px solid #f0ad4e;">
+                    <h2 style="color:#f0ad4e;">
+                        ₹@Model.TotalRevenue.ToString("N0")
+                    </h2>
+                    <p class="text-muted mb-0">Total Revenue</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Order Stats -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card text-center p-3"
+                     style="border-left: 4px solid #f0ad4e;">
+                    <h2 style="color:#f0ad4e;">@Model.PendingOrders</h2>
+                    <p class="text-muted mb-0">Pending Orders</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card text-center p-3"
+                     style="border-left: 4px solid #5cb85c;">
+                    <h2 style="color:#5cb85c;">@Model.DeliveredOrders</h2>
+                    <p class="text-muted mb-0">Delivered Orders</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3">Quick Actions</h4>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a asp-controller="Admin"
+                   asp-action="Products"
+                   class="button button--active w-100 text-center d-block">
+                    <i class="ti-package"></i> Manage Products
+                </a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a asp-controller="Admin"
+                   asp-action="Orders"
+                   class="button button--active w-100 text-center d-block">
+                    <i class="ti-receipt"></i> Manage Orders
+                </a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a asp-controller="Admin"
+                   asp-action="Categories"
+                   class="button button--active w-100 text-center d-block">
+                    <i class="ti-menu"></i> Manage Categories
+                </a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a asp-controller="Admin"
+                   asp-action="Users"
+                   class="button button--active w-100 text-center d-block">
+                    <i class="ti-user"></i> Manage Users
+                </a>
+            </div>
+        </div>
+
+    </div>
+</section>

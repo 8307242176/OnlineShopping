@@ -1,0 +1,82 @@
+﻿@model IEnumerable<OnlineShopping.Models.Product>
+@{
+    ViewData["Title"] = "Manage Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section style="padding: 40px 0;">
+    <div class="container">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Manage Products</h2>
+            <a asp-controller="Admin"
+               asp-action="AddProduct"
+               class="button button--active">
+                + Add New Product
+            </a>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+
+        <!-- Products Table -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead style="background:#f9f9f9;">
+                    <tr>
+                        <th>#</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>@p.PrdId</td>
+                            <td>
+                                <img src="@(p.ProductImages.FirstOrDefault()?.ImageUrl
+                                                                                ?? "~/img/product/product1.png")"
+                                     style="width:50px; height:50px;
+                                                object-fit:cover;
+                                                border-radius:4px;"
+                                     alt="@p.PrdName">
+                            </td>
+                            <td>@p.PrdName</td>
+                            <td>₹@p.Price</td>
+                            <td>@p.Cat?.CatName</td>
+                            <td>
+                                <a asp-controller="Admin"
+                                   asp-action="EditProduct"
+                                   asp-route-id="@p.PrdId"
+                                   class="btn btn-sm btn-warning">
+                                    <i class="ti-pencil"></i> Edit
+                                </a>
+                                <a asp-controller="Admin"
+                                   asp-action="DeleteProduct"
+                                   asp-route-id="@p.PrdId"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Delete this product?')">
+                                    <i class="ti-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="gray_btn mt-3">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+</section>

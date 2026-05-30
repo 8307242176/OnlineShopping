@@ -1,0 +1,111 @@
+﻿@model OnlineShopping.ViewModel.Register
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- ================ start banner area ================= -->
+<section class="blog-banner-area" id="category"
+         style="min-height: unset; padding: 30px 0;">
+    <div class="container">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Register</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Register</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ end banner area ================= -->
+<!--================ Register Box Area =================-->
+<section class="login_box_area section-margin">
+    <div class="container">
+        <div class="row">
+
+            <!-- Left side promo -->
+            <div class="col-lg-6">
+                <div class="login_box_img">
+                    <div class="hover">
+                        <h4>Already have an account?</h4>
+                        <p>Login to your account and continue shopping with us.</p>
+                        <a class="button button-account"
+                           asp-controller="Account"
+                           asp-action="Login">Login Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side register form -->
+            <div class="col-lg-6">
+                <div class="login_form_inner register_form_inner">
+                    <h3>Create an account</h3>
+
+                    @* Show validation errors *@
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <form class="row login_form"
+                          asp-controller="Account"
+                          asp-action="Register"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div class="col-md-12 form-group">
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   placeholder="Full Name"
+                                   onfocus="this.placeholder=''"
+                                   onblur="this.placeholder='Full Name'" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <input asp-for="Email"
+                                   class="form-control"
+                                   placeholder="Email Address"
+                                   onfocus="this.placeholder=''"
+                                   onblur="this.placeholder='Email Address'" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                   
+
+                        <div class="col-md-12 form-group">
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control"
+                                   placeholder="Password"
+                                   onfocus="this.placeholder=''"
+                                   onblur="this.placeholder='Password'" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-12 form-group">
+                            <button type="submit"
+                                    class="button button-register w-100">
+                                Register
+                            </button>
+                        </div>
+
+                        <div class="col-md-12 form-group text-center">
+                            <a asp-controller="Account"
+                               asp-action="Login">
+                                Already have an account? Login here
+                            </a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!--================ End Register Box Area =================-->

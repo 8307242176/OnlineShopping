@@ -1,0 +1,237 @@
+﻿@model IEnumerable<OnlineShopping.Models.Product>
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="site-main">
+
+    <!--================ Hero Banner =================-->
+    <section class="hero-banner">
+        <div class="container">
+            <div class="row no-gutters align-items-center pt-60px">
+                <div class="col-5 d-none d-sm-block">
+                    <div class="hero-banner__img">
+                        <img class="img-fluid" src="~/img/home/hero-banner.png"  alt="">
+                    </div>
+                </div>
+                <div class="col-sm-7 col-lg-6 offset-lg-1 pl-4 pl-md-5 pl-lg-0">
+                    <div class="hero-banner__content">
+                        <h4>Shop is fun</h4>
+                        <h1>Browse Our Premium Products</h1>
+                        <p>
+                            Discover the best products at unbeatable prices.
+                            Shop now and enjoy fast delivery.
+                        </p>
+                        <a class="button button-hero"
+                           asp-controller="Product"
+                           asp-action="Index">Browse Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ Hero Banner End =================-->
+    <!--================ Hero Carousel =================-->
+    <section class="section-margin mt-0">
+        <div class="owl-carousel owl-theme hero-carousel">
+            <div class="hero-carousel__slide">
+                <img src="~/img/home/hero-slide1.png" alt="" class="img-fluid">
+                <a asp-controller="Product" asp-action="Index"
+                   class="hero-carousel__slideOverlay">
+                    <h3>Top Accessories</h3>
+                    <p>New Arrivals</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="~/img/home/hero-slide2.png" alt="" class="img-fluid">
+                <a asp-controller="Product" asp-action="Index"
+                   class="hero-carousel__slideOverlay">
+                    <h3>Best Sellers</h3>
+                    <p>Shop Now</p>
+                </a>
+            </div>
+            <div class="hero-carousel__slide">
+                <img src="~/img/home/hero-slide3.png" alt="" class="img-fluid">
+                <a asp-controller="Product" asp-action="Index"
+                   class="hero-carousel__slideOverlay">
+                    <h3>Special Offers</h3>
+                    <p>Limited Time</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!--================ Hero Carousel End =================-->
+    <!--================ Trending Products =================-->
+    <section class="section-margin calc-60px">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <p>Popular Items in the market</p>
+                <h2>Trending <span class="section-intro__style">Products</span></h2>
+            </div>
+            <div class="row">
+
+                @if (!Model.Any())
+                {
+                    <div class="col-12 text-center">
+                        <p>No products available yet. Check back soon!</p>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var product in Model)
+                    {
+                        <div class="col-md-6 col-lg-4 col-xl-3">
+                            <div class="card text-center card-product">
+                                <div class="card-product__img">
+                                    <img class="card-img"
+                                         src="@(product.ProductImages.FirstOrDefault()?.ImageUrl ?? "/img/product/default.jpg")"
+                                         alt="@product.PrdName">
+                                    <ul class="card-product__imgOverlay">
+                                        <li>
+                                            <a asp-controller="Product"
+                                               asp-action="Detail"
+                                               asp-route-id="@product.PrdId">
+                                                <button><i class="ti-search"></i></button>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-controller="Cart"
+                                               asp-action="AddToCart"
+                                               asp-route-pdId="@product.PrdId">
+                                                <button><i class="ti-shopping-cart"></i></button>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <button><i class="ti-heart"></i></button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <p>@product.Scatg?.SubCatgName</p>
+                                    <h4 class="card-product__title">
+                                        <a asp-controller="Product"
+                                           asp-action="Detail"
+                                           asp-route-id="@product.PrdId">
+                                            @product.PrdName
+                                        </a>
+                                    </h4>
+                                    <p class="card-product__price">₹@product.Price</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+            </div>
+
+            <!-- View All Button -->
+            <div class="text-center mt-4">
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   class="button button--active">
+                    View All Products
+                </a>
+            </div>
+
+        </div>
+    </section>
+    <!--================ Trending Products End =================-->
+    <!--================ Offer Banner =================-->
+    <section class="offer" id="parallax-1"
+             data-anchor-target="#parallax-1"
+             data-300-top="background-position: 20px 30px"
+             data-top-bottom="background-position: 0 20px">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5">
+                    <div class="offer__content text-center">
+                        <h3>Up To 50% Off</h3>
+                        <h4>Special Sale</h4>
+                        <p>Limited time offer on selected products</p>
+                        <a class="button button--active mt-3 mt-xl-4"
+                           asp-controller="Product"
+                           asp-action="Index">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ Offer Banner End =================-->
+    <!--================ Best Sellers Carousel =================-->
+    <section class="section-margin calc-60px">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <p>Popular Items in the market</p>
+                <h2>Best <span class="section-intro__style">Sellers</span></h2>
+            </div>
+            <div class="owl-carousel owl-theme" id="bestSellerCarousel">
+                @foreach (var product in Model)
+                {
+                    <div class="card text-center card-product">
+                        <div class="card-product__img">
+                            <img class="img-fluid"
+                                 src="@(product.ProductImages.FirstOrDefault()?.ImageUrl ?? "/img/product/default.jpg")"
+                                 alt="@product.PrdName">
+                            <ul class="card-product__imgOverlay">
+                                <li>
+                                    <a asp-controller="Product"
+                                       asp-action="Detail"
+                                       asp-route-id="@product.PrdId">
+                                        <button><i class="ti-search"></i></button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-controller="Cart"
+                                       asp-action="AddToCart"
+                                       asp-route-pdId="@product.PrdId">
+                                        <button><i class="ti-shopping-cart"></i></button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <button><i class="ti-heart"></i></button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <p>@product.Scatg?.SubCatgName</p>
+                            <h4 class="card-product__title">
+                                <a asp-controller="Product"
+                                   asp-action="Detail"
+                                   asp-route-id="@product.PrdId">
+                                    @product.PrdName
+                                </a>
+                            </h4>
+                            <p class="card-product__price">₹@product.Price</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+    <!--================ Best Sellers End =================-->
+    <!--================ Subscribe Section =================-->
+    <section class="subscribe-position">
+        <div class="container">
+            <div class="subscribe text-center">
+                <h3 class="subscribe__title">Get Update From Anywhere</h3>
+                <p>Subscribe to our newsletter for latest deals and offers</p>
+                <div class="subscribe-form form-inline mt-5 pt-1">
+                    <div class="form-group ml-sm-auto">
+                        <input class="form-control mb-1"
+                               type="email"
+                               placeholder="Enter your email"
+                               onfocus="this.placeholder=''"
+                               onblur="this.placeholder='Enter your email'">
+                    </div>
+                    <button class="button button-subscribe mr-auto mb-1"
+                            type="button">
+                        Subscribe Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ Subscribe End =================-->
+
+</main>

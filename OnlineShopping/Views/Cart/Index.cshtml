@@ -1,0 +1,188 @@
+﻿@model IEnumerable<OnlineShopping.ViewModel.CartVM>
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int total = Model.Sum(x => x.SubTotal);
+}
+
+<!-- ================ Banner Area ================= -->
+<section class="blog-banner-area" id="category"
+         style="min-height:unset; padding: 30px 0;">
+    <div class="container">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Shopping Cart</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Shopping Cart
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ End Banner ================= -->
+<!--================ Cart Area =================-->
+<section class="cart_area">
+    <div class="container">
+        <div class="cart_inner">
+
+            @if (!Model.Any())
+            {
+                <!-- Empty Cart -->
+                <div class="text-center py-5">
+                    <i class="ti-shopping-cart"
+                       style="font-size:60px; color:#ccc;"></i>
+                    <h4 class="mt-3 text-muted">Your cart is empty!</h4>
+                    <p class="text-muted">
+                        Looks like you haven't added anything yet.
+                    </p>
+                    <a asp-controller="Product"
+                       asp-action="Index"
+                       class="button button--active mt-3">
+                        Continue Shopping
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <!-- Product Name + Image -->
+                                    <td>
+                                        <div class="media">
+                                            <div class="d-flex">
+                                                src="@(item.ImgURL ?? "/img/product/default.jpg")"
+                                                     alt="@item.PdName"
+                                                     style="width:80px; height:80px; object-fit:cover;">
+                                            </div>
+                                            <div class="media-body ml-3 d-flex align-items-center">
+                                                <p class="mb-0">@item.PdName</p>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <!-- Unit Price -->
+                                    <td>
+                                        <h5>₹@item.Price</h5>
+                                    </td>
+
+                                    <!-- Quantity -->
+                                    <td>
+                                        <div class="product_count">
+                                            <input type="text"
+                                                   value="@item.Quantity"
+                                                   class="input-text qty"
+                                                   readonly
+                                                   style="width:50px; text-align:center;">
+                                        </div>
+                                    </td>
+
+                                    <!-- Subtotal -->
+                                    <td>
+                                        <h5>₹@item.SubTotal</h5>
+                                    </td>
+
+                                    <!-- Remove Button -->
+                                    <td>
+                                        <a asp-controller="Cart"
+                                           asp-action="Remove"
+                                           asp-route-cartItemId="@item.CartItemId"
+                                           class="primary-btn"
+                                           onclick="return confirm('Remove this item?')">
+                                            <i class="ti-trash"></i> Remove
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+
+                            <!-- Subtotal Row -->
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><h5>Subtotal</h5></td>
+                                <td><h5>₹@total</h5></td>
+                            </tr>
+
+                            <!-- Shipping Row -->
+                            <tr class="shipping_area">
+                                <td class="d-none d-md-block"></td>
+                                <td></td>
+                                <td></td>
+                                <td><h5>Shipping</h5></td>
+                                <td>
+                                    <div class="shipping_box">
+                                        <ul class="list">
+                                            <li class="active">
+                                                <a href="#">Free Shipping</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Grand Total Row -->
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td><h5 class="font-weight-bold">Grand Total</h5></td>
+                                <td>
+                                    <h5 class="font-weight-bold"
+                                        style="color:#ff3a6e;">
+                                        ₹@total
+                                    </h5>
+                                </td>
+                            </tr>
+
+                            <!-- Buttons Row -->
+                            <tr class="out_button_area">
+                                <td class="d-none-l"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="checkout_btn_inner d-flex align-items-center">
+                                        <a asp-controller="Product"
+                                           asp-action="Index"
+                                           class="gray_btn">
+                                            Continue Shopping
+                                        </a>
+                                        <a asp-controller="Order"
+                                           asp-action="PlaceOrder"
+                                           class="primary-btn ml-2">
+                                            Proceed to Checkout
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+            
+        </div>
+    </div>
+</section>
+<!--================ End Cart Area =================-->

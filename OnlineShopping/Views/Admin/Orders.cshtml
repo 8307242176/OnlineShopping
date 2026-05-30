@@ -1,0 +1,98 @@
+﻿@model IEnumerable<OnlineShopping.Models.Order>
+@{
+    ViewData["Title"] = "Manage Orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section style="padding: 40px 0;">
+    <div class="container">
+        <h2 class="mb-4">Manage Orders</h2>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead style="background:#f9f9f9;">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Items</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>#@order.OrdId</td>
+                            <td>@order.Login?.Name</td>
+                            <td>₹@order.TotalAmount</td>
+                            <td>@order.OrderItems.Count items</td>
+                            <td>
+                                @{
+                                    var color = order.Status switch
+                                    {
+                                        "Pending"   => "#f0ad4e",
+                                        "Shipped"   => "#5bc0de",
+                                        "Delivered" => "#5cb85c",
+                                        _           => "#999"
+                                    };
+                                }
+                                <span style="color:@color;
+                                             font-weight:bold;">
+                                    @order.Status
+                                </span>
+                            </td>
+                            <td>
+                                <form asp-action="UpdateOrderStatus"
+                                      asp-controller="Admin"
+                                      method="post"
+                                      class="d-flex gap-2">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden"
+                                           name="ordId"
+                                           value="@order.OrdId" />
+                                    <select name="status"
+                                            class="form-control form-control-sm"
+                                            style="width:130px;">
+
+                                        <option value="Pending"
+                                                selected="@(order.Status == "Pending")">
+                                            Pending
+                                        </option>
+
+                                        <option value="Shipped"
+                                                selected="@(order.Status == "Shipped")">
+                                            Shipped
+                                        </option>
+
+                                        <option value="Delivered"
+                                                selected="@(order.Status == "Delivered")">
+                                            Delivered
+                                        </option>
+
+                                    </select>
+                                    <button type="submit"
+                                            class="btn btn-sm btn-primary">
+                                        Update
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <a asp-controller="Admin"
+           asp-action="Index"
+           class="gray_btn mt-3">
+            ← Back to Dashboard
+        </a>
+    </div>
+</section>

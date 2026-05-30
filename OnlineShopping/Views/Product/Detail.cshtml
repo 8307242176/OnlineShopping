@@ -1,0 +1,259 @@
+﻿@model OnlineShopping.Models.Product
+@using OnlineShopping.Models
+@{
+    ViewData["Title"] = Model.PrdName;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var relatedProducts = ViewBag.RelatedProducts as List<Product>;
+}
+
+<!-- ================ Banner Area ================= -->
+<section class="blog-banner-area" id="blog"
+         style="min-height:unset; padding: 30px 0;">
+    <div class="container">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>@Model.PrdName</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Product" asp-action="Index">Shop</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @Model.PrdName
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ End Banner ================= -->
+<!--================ Single Product Area =================-->
+<div class="product_image_area">
+    <div class="container">
+        <div class="row s_product_inner">
+
+            <!-- Left — Product Image Carousel -->
+            <div class="col-lg-6">
+                <div class="owl-carousel owl-theme s_Product_carousel">
+                    @if (Model.ProductImages.Any())
+                    {
+                        @foreach (var img in Model.ProductImages)
+                        {
+                            <div class="single-prd-item">
+                                <img class="img-fluid" src="@(img.ImageUrl ?? "/img/product/default.jpg")"
+                                     alt="@Model.PrdName">
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="single-prd-item">
+                            <img class="img-fluid"
+                                 src="/img/product/default.jpg"
+                                 alt="@Model.PrdName">
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right — Product Info -->
+            <div class="col-lg-5 offset-lg-1">
+                <div class="s_product_text">
+                    <h3>@Model.PrdName</h3>
+                    <h2>₹@Model.Price</h2>
+
+                    <ul class="list">
+                        <li>
+                            <a href="#">
+                                <span>Category</span> : @Model.Cat?.CatName
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>Sub Category</span> : @Model.Scatg?.SubCatgName
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>Availability</span> : In Stock
+                            </a>
+                        </li>
+                    </ul>
+
+                    <p>@Model.PrdDescription</p>
+
+                    <!-- Add to Cart Button -->
+                    <div class="product_count">
+                        <a class="button primary-btn"
+                           asp-controller="Cart"
+                           asp-action="AddToCart"
+                           asp-route-pdId="@Model.PrdId">
+                            Add to Cart
+                        </a>
+                    </div>
+
+                    <!-- Wishlist / Compare Icons -->
+                    <div class="card_area d-flex align-items-center mt-3">
+                        <a class="icon_btn" href="#">
+                            <i class="lnr lnr-diamond"></i>
+                        </a>
+                        <a class="icon_btn" href="#">
+                            <i class="lnr lnr-heart"></i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--================ End Single Product Area =================-->
+<!--================ Product Description Tabs =================-->
+<section class="product_description_area">
+    <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="desc-tab"
+                   data-toggle="tab" href="#desc"
+                   role="tab">Description</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="review-tab"
+                   data-toggle="tab" href="#review"
+                   role="tab">Reviews</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+
+            <!-- Description Tab -->
+            <div class="tab-pane fade show active" id="desc"
+                 role="tabpanel">
+                <p>
+                    @(string.IsNullOrEmpty(Model.PrdDescription)
+                                        ? "No description available for this product."
+                                        : Model.PrdDescription)
+                </p>
+            </div>
+
+            <!-- Reviews Tab (static for now) -->
+            <div class="tab-pane fade" id="review" role="tabpanel">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="row total_rate">
+                            <div class="col-6">
+                                <div class="box_total">
+                                    <h5>Overall</h5>
+                                    <h4>4.0</h4>
+                                    <h6>(3 Reviews)</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review_list mt-3">
+                            <div class="review_item">
+                                <div class="media">
+                                    <div class="d-flex">
+                                        <img src="~/img/product/review-1.png" alt="">
+                                    </div>
+                                    <div class="media-body ml-3">
+                                        <h4>Sample Review</h4>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star-o"></i>
+                                    </div>
+                                </div>
+                                <p>Great product! Highly recommended.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="review_box">
+                            <h4>Add a Review</h4>
+                            <p>Your Rating:</p>
+                            <ul class="list d-flex" style="list-style:none; padding:0;">
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                <li><a href="#"><i class="fa fa-star"></i></a></li>
+                            </ul>
+                            <form class="form-contact form-review mt-3">
+                                <div class="form-group">
+                                    <input class="form-control" type="text"
+                                           placeholder="Your Full Name">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="email"
+                                           placeholder="Email Address">
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control w-100"
+                                              rows="4"
+                                              placeholder="Your Review"></textarea>
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit"
+                                            class="button button--active button-review">
+                                        Submit Now
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!--================ End Product Description Tabs =================-->
+<!--================ Related Products =================-->
+@if (relatedProducts != null && relatedProducts.Any())
+{
+    <section class="related-product-area section-margin--small mt-0">
+        <div class="container">
+            <div class="section-intro pb-60px">
+                <p>You might also like</p>
+                <h2>Related <span class="section-intro__style">Products</span></h2>
+            </div>
+            <div class="row mt-30">
+                @foreach (var rp in relatedProducts)
+                {
+                    <div class="col-sm-6 col-xl-3 mb-4">
+                        <div class="single-search-product-wrapper">
+                            <div class="single-search-product d-flex">
+                                <a asp-controller="Product"
+                                   asp-action="Detail"
+                                   asp-route-id="@rp.PrdId">
+                                    src="@(rp.ProductImages.FirstOrDefault()?.ImageUrl ?? "/img/product/default.jpg")"
+                                         alt="@rp.PrdName">
+                                </a>
+                                <div class="desc ml-2">
+                                    <a asp-controller="Product"
+                                       asp-action="Detail"
+                                       asp-route-id="@rp.PrdId"
+                                       class="title">@rp.PrdName</a>
+                                    <div class="price">₹@rp.Price</div>
+                                    <a asp-controller="Cart"
+                                       asp-action="AddToCart"
+                                       asp-route-pdId="@rp.PrdId"
+                                       class="btn btn-sm btn-outline-secondary mt-1">
+                                        <i class="ti-shopping-cart"></i> Add
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+<!--================ End Related Products =================-->

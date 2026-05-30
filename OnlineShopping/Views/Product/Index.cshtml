@@ -1,0 +1,218 @@
+﻿@model IEnumerable<OnlineShopping.Models.Product>
+@using OnlineShopping.Models
+@{
+    ViewData["Title"] = "Shop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var categories = ViewBag.Categories as IEnumerable<Category>;
+    int? selectedCatg = ViewBag.SelectedCatg;
+    string keyword = ViewBag.Keyword;
+}
+
+<!-- ================ Banner Area ================= -->
+<section class="blog-banner-area" id="category"
+         style="min-height:unset; padding: 30px 0;">
+    <div class="container">
+        <div class="blog-banner">
+            <div class="text-center">
+                <h1>Shop</h1>
+                <nav aria-label="breadcrumb" class="banner-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Shop</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ End Banner ================= -->
+<!-- ================ Shop Section ================= -->
+<section class="section-margin--small mb-5">
+    <div class="container">
+        <div class="row">
+
+            <!-- ===== LEFT SIDEBAR ===== -->
+            <div class="col-xl-3 col-lg-4 col-md-5">
+
+                <!-- Categories -->
+                <div class="sidebar-categories">
+                    <div class="head">Browse Categories</div>
+                    <ul class="main-categories">
+                        <li class="common-filter">
+                            <ul>
+                                <!-- All Products -->
+                                <li class="filter-list">
+                                    <a asp-controller="Product"
+                                       asp-action="Index"
+                                       class="@(selectedCatg == null ? "font-weight-bold" : "")">
+                                        All Products
+                                        <span>(@Model.Count())</span>
+                                    </a>
+                                </li>
+
+                                <!-- Dynamic Categories from DB -->
+                                @if (categories != null)
+                                {
+                                    @foreach (var cat in categories)
+                                    {
+                                        <li class="filter-list">
+                                            <a asp-controller="Product"
+                                               asp-action="Index"
+                                               asp-route-catgId="@cat.CatId"
+                                               class="@(selectedCatg == cat.CatId ? "font-weight-bold" : "")">
+                                                @cat.CatName
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Search Filter -->
+                <div class="sidebar-filter mt-3">
+                    <div class="top-filter-head">Search Products</div>
+                    <div class="common-filter p-3">
+                        <form asp-controller="Product"
+                              asp-action="Index"
+                              method="get">
+                            <div class="input-group">
+                                <input type="text"
+                                       name="keyword"
+                                       value="@keyword"
+                                       class="form-control"
+                                       placeholder="Search products..." />
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-outline-secondary">
+                                        <i class="ti-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <!-- ===== END SIDEBAR ===== -->
+            <!-- ===== RIGHT PRODUCT AREA ===== -->
+            <div class="col-xl-9 col-lg-8 col-md-7">
+
+                <!-- Filter Bar -->
+                <div class="filter-bar d-flex flex-wrap align-items-center mb-3">
+                    <div class="mr-auto">
+                        <span class="text-muted">
+                            Showing <strong>@Model.Count()</strong> products
+                            @if (!string.IsNullOrEmpty(keyword))
+                            {
+                                <span> for "<strong>@keyword</strong>"</span>
+                            }
+                        </span>
+                    </div>
+                    @if (selectedCatg != null || !string.IsNullOrEmpty(keyword))
+                    {
+                        <a asp-controller="Product"
+                           asp-action="Index"
+                           class="btn btn-sm btn-outline-secondary">
+                            Clear Filter
+                        </a>
+                    }
+                </div>
+
+                <!-- Product Grid -->
+                <section class="lattest-product-area pb-40 category-list">
+                    <div class="row">
+
+                        @if (!Model.Any())
+                        {
+                            <div class="col-12 text-center py-5">
+                                <h5 class="text-muted">No products found.</h5>
+                                <a asp-controller="Product"
+                                   asp-action="Index"
+                                   class="button button--active mt-3">
+                                    View All Products
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var product in Model)
+                            {
+                                <div class="col-md-6 col-lg-4 mb-4">
+                                    <div class="card text-center card-product">
+                                        <div class="card-product__img">
+                                            <img class="card-img"
+                                                 src="@(product.ProductImages.FirstOrDefault()?.ImageUrl ?? "/img/product/default.jpg")"
+                                                 alt="@product.PrdName">
+                                            <ul class="card-product__imgOverlay">
+                                                <li>
+                                                    <a asp-controller="Product"
+                                                       asp-action="Detail"
+                                                       asp-route-id="@product.PrdId">
+                                                        <button><i class="ti-search"></i></button>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a asp-controller="Cart"
+                                                       asp-action="AddToCart"
+                                                       asp-route-pdId="@product.PrdId">
+                                                        <button><i class="ti-shopping-cart"></i></button>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <button><i class="ti-heart"></i></button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>@product.Scatg?.SubCatgName</p>
+                                            <h4 class="card-product__title">
+                                                <a asp-controller="Product"
+                                                   asp-action="Detail"
+                                                   asp-route-id="@product.PrdId">
+                                                    @product.PrdName
+                                                </a>
+                                            </h4>
+                                            <p class="card-product__price">₹@product.Price</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </section>
+                <!-- End Product Grid -->
+
+            </div>
+            <!-- ===== END RIGHT AREA ===== -->
+
+        </div>
+    </div>
+</section>
+<!-- ================ End Shop Section ================= -->
+<!-- ================ Subscribe Section ================= -->
+<section class="subscribe-position">
+    <div class="container">
+        <div class="subscribe text-center">
+            <h3 class="subscribe__title">Get Update From Anywhere</h3>
+            <p>Subscribe to our newsletter for latest deals and offers</p>
+            <div class="form-inline mt-5 pt-1 justify-content-center">
+                <div class="form-group">
+                    <input class="form-control mb-1"
+                           type="email"
+                           placeholder="Enter your email"
+                           onfocus="this.placeholder=''"
+                           onblur="this.placeholder='Enter your email'">
+                </div>
+                <button class="button button-subscribe ml-2 mb-1"
+                        type="button">
+                    Subscribe Now
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ================ End Subscribe ================= -->
